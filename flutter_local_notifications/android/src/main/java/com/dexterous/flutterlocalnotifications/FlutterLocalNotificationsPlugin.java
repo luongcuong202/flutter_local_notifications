@@ -232,6 +232,21 @@ public class FlutterLocalNotificationsPlugin
     }
   }
 
+  public static PendingIntent getPendingIntentOfFlutterNotificationLibrary(Context context, int notificationId, String payload){
+
+    Intent intent = getLaunchIntent(context);
+    intent.setAction(SELECT_NOTIFICATION);
+    intent.putExtra(NOTIFICATION_ID, notificationId);
+    intent.putExtra(PAYLOAD, payload);
+    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+    if (VERSION.SDK_INT >= VERSION_CODES.M) {
+      flags |= PendingIntent.FLAG_IMMUTABLE;
+    }
+    PendingIntent pendingIntent =
+            PendingIntent.getActivity(context, notificationId, intent, flags);
+
+    return pendingIntent;
+  }
   protected static Notification createNotification(
       Context context, NotificationDetails notificationDetails) {
     NotificationChannelDetails notificationChannelDetails =
